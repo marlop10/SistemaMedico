@@ -1,183 +1,198 @@
 <template>
-    <div class="login">
-        <section id="login">
-        <div class="block-color"></div>
-
-        <div class="container">
-            <div class="row justify-content-center">
-            <div class="col-12 col-sm-7 col-md-5">
-                <div id="ventanalog">
-                <div class="logo-login">
-                    <div class="box-logo">
-                    <img src="" class="img-responsive">
-                    </div>
-                </div>
-                <div class="box-form">
-                    <form @submit.prevent="doLogin">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        </span>
-                        <input v-model="userData.email" type="text" class="form-control input-login"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Usuario">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">
-                        <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                        </span>
-                        <input v-model="userData.password" type="password" class="form-control input-login" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Contraseña">
-                    </div>
-
-                    <button class="btn-style" type="submit">Ingresar</button>
-                    </form>
-
-                </div>
-                </div>
-            </div>
-            </div>
+  <div class="login" @submit.prevent="doLogin">
+    <section class="signin cf">
+      <div class="avatar">
+        <i class="icon fas fa-user-md"></i>
+      </div>
+      <form >
+        <div class="inputrow">
+          <label for="name" class="ion-person"></label>
+          <input v-model="userData.email" type="text" id="name" placeholder="Username">
         </div>
-        </section>
-    </div>
+        <div class="inputrow">
+          <label for="pass" class="ion-locked"></label>
+          <input v-model="userData.password" type="password" name="" id="pass" placeholder="Password">
+        </div>
+        <input type="submit" value="Login">
+      </form>
+    </section>
+  </div>
 </template>
 
 <script>
-import axios from 'axios'
-import { mapState } from "vuex"
+import axios from "axios";
+import { mapState } from "vuex";
+import todoService from '../apiacces/todoService'
 
 export default {
-    name: "login",
-    data() {
-            return {
-                userData: {
-                    email: "",
-                    password: ""
-                }
-            }
-        },
-    methods: {
-        redirect(){
-            this.$router.push({ name: "Home"})
-        },
-        resetData(){
-            this.userData.email = this.userData.pass = ""
-        },
-        async doLogin(){
-            try {
-                await this.$store.dispatch("user/doLogin",{
-                    email: this.userData.email,
-                    password: this.userData.password
-                })
-                const login = await axios.post("http://127.0.0.1:8000/empleados/login/", this.userData)
-                this.updateProfile(login.data.access_token)
-                this.resetData();
-                this.redirect();
-            } catch (error) {
-                console.error(error.message)
-            }
-        },
-        async updateProfile(token){
-            try {
-                await this.$store.dispatch("user/updateProfile",{
-                    name: token
-                });
-
-                console.log("funciono")
-            } catch (error) {
-                console.error(error.message)
-            }
-        }
+  name: "login",
+  data() {
+    return {
+      userData: {
+        email: "",
+        password: "",
+      },
+    };
+  },
+  methods: {
+    redirect() {
+      this.$router.push({ name: "Home" });
     },
-    computed:{
-        ...mapState("user",["user"])
-    }
+    resetData() {
+      this.userData.email = this.userData.pass = "";
+    },
+    async doLogin() {
+      try {
+        await this.$store.dispatch("user/doLogin", {
+          email: this.userData.email,
+          password: this.userData.password,
+        });
+        const login = await axios.post(
+          "http://127.0.0.1:8000/empleados/login/",
+          this.userData
+        );
+        this.updateProfile(login.data.access_token);
+        this.resetData();
+        this.redirect();
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
+    async updateProfile(token) {
+      try {
+        await this.$store.dispatch("user/updateProfile", {
+          name: token,
+        });
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
+  },
+  computed: {
+    ...mapState("user", ["user"]),
+  },
 };
 </script>
 
 <style lang="scss">
-$white: #fff;
-$black: #182b4d;
-$m-white: #f7fafc;
-$m-black: #868686;
-$blue-gray: #bad3d6;
-
-$principal: #007281;
-$secundario: #6bc8ff;
-
-$icons: #adb5bd;
-
-// Fonts
-$regular: "Raleway";
-
-#login{
-  background-color: $black;
+.login{
+  background: #2e3441;
+  background-image: -webkit-radial-gradient(top, circle cover, #4e7a89, #2e3441 80%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-  background: linear-gradient(#182b4de6, #182b4df2);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  background-size: cover;
-  position: relative;
-  .block-color{
-    background: linear-gradient(87deg,$principal,$secundario)!important;
-    height: 250px;
-    &:after{
-      content: '';
-      width: 0;
-      height: 0;
-      border-bottom: 50px solid $black;
-      border-left: 1100px solid transparent;
-      position: absolute;
-      right: 0;
-      top: 200px;
-    }
-  }
-  .box-logo{
-    width: 120px;
-    height: 60px;
-    display: flex;
-    margin: 0 auto;
-    padding-bottom: 25px;
-    img{
-      width: 100%;
-      object-fit: contain;
-    }
-  }
-  #ventanalog{
-    background: $m-white;
-    margin: 0 auto;
-    padding: 25px;
-    border-radius: 6px;
-    form{
-      text-align: center;
-      .input-group-text{
-        background-color: $white !important;
-        color: $icons;
-        border-right: 0 !important;
-        border-radius: 6px 0 0 6px;
-      }
-      .input-login{
-        border-left: 0 !important;
-        color: $icons;
-        padding-left: 5px;
-        &:focus{
-          box-shadow: none;
-          border-color: $secundario;
-        }
-      }
-      ::placeholder {
-        color: $icons;
-      }
-      .btn-style{
-        background: linear-gradient(to right, $principal 0%, $secundario 51%, $principal 100%);
-        color: $white;
-        padding: 5px 50px;
-        border-radius: 6px;
-        background-size: 200% auto;
-        transition: 0.5s;
-        &:hover {
-          background-position: right center;
-        }
-      }
-    }
-  }
+  display: flex;
+  align-items: center;
 }
+.signin {
+  display: block;
+  position: relative;
+  width: 250px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(0,0,0,0.1);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.2), inset -1px -1px 0 0 rgba(0,0,0,0.2);
+  -moz-box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.2), inset -1px -1px 0 0 rgba(0,0,0,0.2);
+  box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.2), inset -1px -1px 0 0 rgba(0,0,0,0.2);
+}
+.signin .avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 35px auto;
+  border: 5px solid #fff;
+  -webkit-border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  -webkit-pointer-events: none;
+  -moz-pointer-events: none;
+  pointer-events: none;
+}
+.signin .icon {
+  text-align: center;
+  font-family: Ionicons;
+  display: block;
+  margin: 0 auto;
+  height: 100%;
+  line-height: 100px;
+  font-size: 3em;
+  color: white;
+}
+.signin .inputrow {
+  position: relative;
+}
+.signin .inputrow label {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+}
+.signin .inputrow label:before {
+  color: #538a9a;
+  opacity: 0.4;
+  -webkit-transition: opacity 300ms 0 ease;
+  -moz-transition: opacity 300ms 0 ease;
+  transition: opacity 300ms 0 ease;
+}
+.signin input[type="text"],
+.signin input[type="password"] {
+  padding: 10px 12px 10px 32px;
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.5);
+  background-color: #fff;
+  color: #333;
+  font-size: 1em;
+  font-weight: 300;
+  outline: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-transition: border-color 300ms 0 ease;
+  -moz-transition: border-color 300ms 0 ease;
+  transition: border-color 300ms 0 ease;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.signin input[type="text"]:focus + label:before,
+.signin input[type="password"]:focus + label:before {
+  opacity: 1;
+}
+.signin input[type="submit"] {
+  -webkit-appearance: none;
+  height: 40px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background-color: #538a9a;
+  text-transform: uppercase;
+  color: #fff;
+  border: 0px;
+  float: right;
+  margin: 0;
+  outline: none;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.signin input[type="submit"]:hover {
+  background-color: #5e98a8;
+}
+.signin input[type="submit"]:active {
+  background-color: #4a7b89;
+}
+.cf:before,
+.cf:after {
+  content: " ";
+  display: table;
+}
+.cf:after {
+  clear: both;
+}
+.cf {
+  zoom: 1;
+}
+
 </style>

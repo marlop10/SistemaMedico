@@ -1,28 +1,26 @@
 <template>
   <div>
-      <p>hola</p>
-      <button @click="doLogout" class="button">Logout</button>
+    <Navegacion/>
+    <div class="page-content p-5" id="content">
+     <h1>Hola</h1>
+    </div>
   </div>
 </template>
 
 <script>
-import { auth } from "../firebase"
-
+import Navegacion from '../components/navegacion.vue';
 export default {
     name: "Home",
-    methods: {
-      async doLogout() {
-        try {
-          await this.$store.dispatch("user/doLogout");
-          this.$router.push({ name: "Login" });
-        } catch (error) {
-          console.error(error.message);
-        }
-      }
+    components: {
+      Navegacion,
     }
 }
 </script>
 
 <style>
-
+.page-content {
+  width: calc(100% - 17rem);
+  margin-left: 17rem;
+  transition: all 0.4s;
+}
 </style>
