@@ -2,17 +2,19 @@
   <div>
     <Navegacion/>
     <div class="page-content p-5" id="content">
-     <h1>Hola</h1>
+     <Agenda />
     </div>
   </div>
 </template>
 
 <script>
 import Navegacion from '../components/navegacion.vue';
+import Agenda from '../components/Agenda'
 export default {
     name: "Home",
     components: {
       Navegacion,
+      Agenda
     }
 }
 </script>
