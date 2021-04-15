@@ -17,30 +17,16 @@
         </div>
       </div>
       <ul class="nav flex-column bg-white mb-0">
-        <li class="nav-item">
-          <a href="#" class="nav-link text-dark font-italic bg-light">
-            <i class="fas fa-home mr-3 text-primary"></i>
-            Inicio
+        
+        <!--Rutas dinamicas en Menu-->
+        <li v-for="op in opciones" :key="op.nombre" class="nav-item">
+          <a :href="op.ruta" @click="selecter" :id="op.nombre" class="nav-link text-dark font-italic" :class="{ 'bg-info' : op.activo }">
+            <i :class="op.clase"></i>
+              {{ op.nombre }}
           </a>
         </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link text-dark font-italic">
-            <i class="fas fa-calendar-day r-3 text-primary"></i>
-            Citas
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link text-dark font-italic">
-            <i class="fas fa-user-injured mr-3 text-primary"></i>
-            Pacientes
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link text-dark font-italic">
-            <i class="fas fa-file-medical mr-3 text-primary"></i>
-            Expedientes
-          </a>
-        </li>
+        <!--Rutas dinamicas en Menu-->
+
       </ul>
 
       <p class="text-gray font-weight-bold text-uppercase px-3 small py-4 mb-0">
@@ -84,7 +70,36 @@
 <script>
 export default {
   name: "navegacion",
+  data() {
+    return {
+      titulo: "Menu",
+      opciones: [
+        {
+            nombre: "Citas",
+            ruta: "/",
+            clase: "fas fa-calendar-day mr-3 text-primary",
+            activo: true
+          },
+          {
+            nombre: "Pacientes",
+            ruta: "pacientes",
+            clase: "fas fa-user-injured mr-3 text-primary",
+            activo: false
+          },
+          {
+            nombre: "Expediente",
+            ruta: "expediente",
+            clase: "fas fa-file-medical mr-3 text-primary",
+            activo: false
+          }
+      ]
+    }
+  },
   methods: {
+      selecter(e) {
+        let id = e.srcElement.id
+        console.log(id)
+      },
       async doLogout() {
         try {
           await this.$store.dispatch("user/doLogout");
@@ -93,7 +108,7 @@ export default {
           console.error(error.message);
         }
       }
-    },
+    }
 };
 </script>
 

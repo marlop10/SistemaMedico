@@ -1,17 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-//importar componentes
-import Login from '../views/Login'
-import Home from "../views/Home";
+import routes from './routes'
 //store
 import store from "../store";
 
 Vue.use(VueRouter)
-
-const routes = [
-  {path: '/login',name: 'Login',component: Login},
-  {path: '/',name: 'Home',component: Home, meta: { requiresAuth: true}},
-]
 
 const router = new VueRouter({
   mode: 'history',

@@ -1,5 +1,9 @@
 <template>
+  <div>
+    <h3 class="title">Citas</h3>
+    <hr>
     <FullCalendar :options="{...calendarOptions, events: this.EVENTS}"/>
+  </div>
 </template>
 <script>
 
@@ -65,5 +69,8 @@ export default {
 .fc-daygrid-day-number{
   text-decoration: none;
   color: black;
+}
+.title{
+  text-align: center;
 }
 </style>
