@@ -1,5 +1,5 @@
 <template>
-    <FullCalendar :options="calendarOptions"/>
+    <FullCalendar :options="{...calendarOptions, events: this.EVENTS}"/>
 </template>
 <script>
 
@@ -36,10 +36,6 @@ export default {
             day: 'Dia',
             list: 'Lista'
         },
-        events: [{
-          tittle: "hola",
-          start: "2021-04-01",
-        }],
         selectable: true,
         select: this.handleSelect
       },
@@ -54,7 +50,7 @@ export default {
   methods: {
     handleSelect(arg) {
       this.$store.commit("agendaEvents/ADD_EVENT",{
-        tittle: "Something",
+        title: "Something",
         start: arg.startStr,
         end: arg.endStr,
         allDay: arg.allDay
