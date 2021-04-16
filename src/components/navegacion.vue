@@ -18,10 +18,7 @@
       </div>
       <ul class="nav flex-column bg-white mb-0">
         <li class="nav-item">
-          <router-link class="nav-link text-dark font-italic bg-light" to="/"><i class="fas fa-home mr-3 text-primary"></i> Inicio</router-link>
-        </li>
-        <li class="nav-item">
-          <router-link class="nav-link text-dark font-italic" to="/about"><i class="fas fa-calendar-day r-3 text-primary"></i> Citas</router-link>
+          <router-link class="nav-link text-dark font-italic bg-info" to="/"><i class="fas fa-calendar-day r-3 text-primary"></i> Citas</router-link>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link text-dark font-italic">

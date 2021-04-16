@@ -36,8 +36,9 @@ export default {
             day: 'Dia',
             list: 'Lista'
         },
+        height: 760,
         selectable: true,
-        select: this.handleSelect
+        select: this.$parent.handleSelect
       },
     }
   },
@@ -48,7 +49,7 @@ export default {
     ...mapGetters("agendaEvents", ["EVENTS"]),
   },
   methods: {
-    handleSelect(arg) {
+    /* handleSelect(arg) {
       this.$store.commit("agendaEvents/ADD_EVENT",{
         title: "Something",
         start: arg.startStr,
@@ -56,7 +57,7 @@ export default {
         allDay: arg.allDay
       })
       console.log(this.EVENTS)
-    }
+    } */
   },
 }
 </script>
