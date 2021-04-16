@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 //importar componentes
 import Login from '../views/Login'
 import Home from "../views/Home";
+import About from "../views/About";
 //store
 import store from "../store";
 
@@ -11,7 +12,9 @@ Vue.use(VueRouter)
 const routes = [
   {path: '/login',name: 'Login',component: Login},
   {path: '/',name: 'Home',component: Home, meta: { requiresAuth: true}},
+  {path: '/about',name: 'About',component: About, meta: { requiresAuth: true}},
 ]
+
 
 const router = new VueRouter({
   mode: 'history',

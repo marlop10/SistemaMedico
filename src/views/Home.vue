@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Navegacion/>
     <div class="page-content p-5" id="content">
       <Agenda />
     </div>

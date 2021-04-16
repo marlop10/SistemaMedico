@@ -1,9 +1,22 @@
 <template>
   <div id="app">
+    <Navegacion v-if="User"></Navegacion>
     <router-view/>
   </div>
 </template>
-
+<script>
+import Navegacion from './components/navegacion'
+import { mapGetters } from 'vuex'
+export default {
+  name: "App",
+  components: {
+    Navegacion,
+  },
+  computed: {
+    ...mapGetters("user",["User"])
+  },
+}
+</script>
 <style>
 html,
 body {
