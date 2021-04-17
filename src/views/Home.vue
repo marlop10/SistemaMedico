@@ -59,8 +59,8 @@ export default {
   transition: all 0.4s;
   position: relative !important;
 }
-.modal{
-  
+.modal,
+.modal.modalEvent{
   &.activo{
     height: 100vh !important;
     position: absolute !important;
