@@ -59,7 +59,7 @@ export default {
           "diaCita": this.citas.diaCita,
           "phone_number": this.citas.phone_number
         })
-          .then(result =>{
+          .then( () =>{
             this.citas = {}
             this.obtenerCitas()
             this.evento = false

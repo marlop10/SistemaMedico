@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
+import pacientes from './pacientes'
 import agendaEvents from './agendaEvents'
 
 //Firebase
@@ -26,6 +27,7 @@ const store = new Vuex.Store({
   modules: {
     user,
     agendaEvents,
+    pacientes
   }
 })
 

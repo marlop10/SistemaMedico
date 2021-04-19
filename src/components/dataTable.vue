@@ -1,15 +1,15 @@
 <template>
   <div>
     <vue-bootstrap4-table
-      :rows="Pacientes"
+      :rows="PACIENTES"
       :columns="columns"
       :config="config"
       :actions="actions"
-      @crearPaciente="crearPaciente"
+      @abrirModal="abrirModal"
     >
-        <template slot="accion">
+        <template slot="accion" slot-scope="props">
         <div class="buttons">
-          <button class="btn-stylesd">
+          <button class="btn-stylesd" @click="abrirPaciente(props.cell_value)">
               <i class="fas fa-pen-fancy"></i>
           </button>
           <button class="btn-stylesd">
@@ -28,13 +28,17 @@
         <form class="form">
           <label for="name">Nombre del paciente: </label>
           <input class="input" id="name" type="text" placeholder="Nombre del paciente" v-model="setPaciente.nombre">
-          <label for="apellido">Apellido del paciente: </label>
-          <input class="input" id="apellido" type="text" placeholder="Apellido del paciente" v-model="setPaciente.apellido">
-          <label for="tel">Telefono </label>
-          <input type="tel" name="tel" id="tel" v-model="setPaciente.telefono">
-          <label for="dx">Dx: </label>
-          <input class="input" type="text" placeholder="Dx del paciente" id="dx" v-model="setPaciente.Dx">
-          <input class="btn btn-outline-primary" type="submit" value="Generar Cita" @click="CrearPaciente">
+          <label for="apellidoP">Apellido Paterno: </label>
+          <input class="input" id="apellidoP" type="text" placeholder="Apellido Paterno" v-model="setPaciente.apellidoP">
+          <label for="apellidoM">Apellido Materno: </label>
+          <input class="input" id="apellidoM" type="text" placeholder="Apellido Materno" v-model="setPaciente.apellidoM">
+          <label for="sexo">Sexo: </label>
+          <input class="input" id="sexo" type="text" placeholder="Sexo" v-model="setPaciente.sexo">
+          <label for="edad">Edad: </label>
+          <input class="input" type="number" name="edad" id="edad" placeholder="Edad" v-model="setPaciente.edad">
+          <label for="tel">Telefono: </label>
+          <input class="input" type="tel" name="tel" id="tel" v-model="setPaciente.telefono">
+          <input class="btn btn-outline-primary" type="submit" value="Generar Cita" @click.prevent="CrearPaciente">
         </form>
     </Modal>
   </div>
@@ -43,6 +47,8 @@
 <script>
 import VueBootstrap4Table from "vue-bootstrap4-table";
 import Modal from '../components/Modal'
+import todoPaciente from '../apiacces/todoPaciente'
+import { mapGetters, mapState } from 'vuex';
 export default {
   name: "App",
   data() {
@@ -50,16 +56,12 @@ export default {
       evento: false,
       setPaciente: {
           nombre: "",
-          apellido: "",
+          apellidoP: "",
+          apellidoM: "",
+          sexo: "",
+          edad: null,
           telefono: null,
-          Dx: ""
       },
-      Pacientes: [{
-          id: 1,
-          nombre: 'hola',
-          telefono: "as",
-          Dx: "d"
-      }],
       evento: false,
       columns: [
         {
@@ -71,25 +73,29 @@ export default {
           name: "nombre",
         },
         {
-          label: "Telefono",
-          name: "telefono",
+          label: "Sexo",
+          name: "sexo",
         },
         {
-          label: "Dx",
-          name: "Dx",
+          label: "Edad",
+          name: "edad",
+        },
+        {
+          label: "Telefono",
+          name: "telefono",
         },
         { label: "Acciones", name: "id", slot_name: "accion" },
       ],
       actions: [
         {
           btn_text: "Crear Nuevo Paciente",
-          event_name: "crearPaciente",
+          event_name: "abrirModal",
           class: "btn btn-primary",
         },
       ],
       config: {
         checkbox_rows: false,
-        rows_selectable: false,
+        rows_selectable: true,
         card_title: "Pacientes",
         show_refresh_button: false,
         show_reset_button: false,
@@ -104,25 +110,58 @@ export default {
       },
     };
   },
+  mounted () {
+    this.ObtenerPacientes()
+  },
   components: {
     VueBootstrap4Table,
     Modal,
   },
   methods: {
-      crearPaciente() {
+      abrirModal() {
           this.evento = true
       },
       CrearPaciente(){
-          let objPaciente = {
-              nombre: this.setPaciente.nombre +" " + this.setPaciente.apellido,
-              telefono: this.setPaciente.telefono,
-              Dx: this.setPaciente.Dx
-          }
-          this.Pacientes.push(objPaciente)
-          this.evento = false
-          
+        todoPaciente.post({
+          "nombrePaciente": this.setPaciente.nombre, 
+          "nombrePaterno": this.setPaciente.apellidoP,
+          "nombreMaterno": this.setPaciente.apellidoM,
+          "sexo": this.setPaciente.sexo,
+          "edad": this.setPaciente.edad,
+          "phone_number": this.setPaciente.telefono
+        })
+          .then(result =>{
+            this.setPaciente = {}
+            console.log(result.data)
+            this.ObtenerPacientes()  
+            this.evento = false
+          })
+      },
+      ObtenerPacientes(){
+        this.$store.commit("pacientes/BORRAR_PACIENTES")
+        todoPaciente.get()
+          .then(result=>{
+            const dataPaciente =  result.data
+            dataPaciente.map(element =>{
+              this.$store.commit("pacientes/ADD_PACIENTE",{
+                id: element.id,
+                nombre: element.nombrePaciente +" "+ element.nombrePaterno +" "+ element.nombreMaterno,
+                telefono: element.phone_number,
+                sexo: element.sexo,
+                edad: element.edad,
+              })
+            })
+          })
+      },
+      abrirPaciente(paciente){
+        this.evento = true
+        this.$store.commit("pacientes/EDITAR_PACIENTE",paciente)
+        this.setPaciente = this.PACIENTE
       }
   },
+  computed: {
+      ...mapGetters("pacientes", ["PACIENTES","PACIENTE"]),
+    },
 };
 </script>
 
