@@ -7,7 +7,7 @@
         eventClick: this.handleClick,
       }"
     />
-    <div class="modal modalEvent" :class="{ activo: evento }">
+    <Modal class="modalEvent" :class="{ activo: evento }">
       <fieldset class="form">
         <legend>
           <h2>Cita Programada</h2>
@@ -19,7 +19,7 @@
           </div>
         </legend>
       </fieldset>
-    </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -38,6 +38,9 @@ import listPlugin from "@fullcalendar/list";
 
 //importar vuex
 import { mapGetters, mapState } from "vuex";
+
+//importar components
+import Modal from '../components/Modal'
 
 export default {
   data() {
@@ -77,6 +80,7 @@ export default {
   },
   components: {
     FullCalendar, // make the <FullCalendar> tag available
+    Modal,
   },
   computed: {
     ...mapGetters("agendaEvents", ["EVENTS"]),

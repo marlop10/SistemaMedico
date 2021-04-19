@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const baseURL = "127.0.0.1:8000/empleados/login/"
+const baseURL = "http://127.0.0.1:8000/"
 
 
 export default axios.create({

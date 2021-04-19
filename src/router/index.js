@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 //importar componentes
 import Login from '../views/Login'
 import Home from "../views/Home";
-import About from "../views/About";
+import Pacientes from '../views/Pacientes'
 //store
 import store from "../store";
 
@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 const routes = [
   {path: '/login',name: 'Login',component: Login},
   {path: '/',name: 'Home',component: Home, meta: { requiresAuth: true}},
-  {path: '/about',name: 'About',component: About, meta: { requiresAuth: true}},
+  {path: '/pacientes',name: 'Pacientes',component: Pacientes, meta: { requiresAuth: true}},
 ]
 
 

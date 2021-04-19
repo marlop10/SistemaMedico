@@ -21,10 +21,7 @@
           <router-link class="nav-link text-dark font-italic bg-info" to="/"><i class="fas fa-calendar-day r-3 text-primary"></i> Citas</router-link>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link text-dark font-italic">
-            <i class="fas fa-user-injured mr-3 text-primary"></i>
-            Pacientes
-          </a>
+          <router-link class="nav-link text-dark font-italic" to="/pacientes"><i class="fas fa-user-injured mr-3 text-primary"></i> Pacientes</router-link>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link text-dark font-italic">

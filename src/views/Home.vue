@@ -2,15 +2,17 @@
   <div>
     <div class="page-content p-5" id="content">
       <Agenda />
-      <div class="modal" :class="{'activo': evento}">
+      <Modal class="modal" :class="{ activo: evento }">
         <form class="form">
           <label for="name">Nombre del paciente: </label>
-          <input class="input" type="text" placeholder="Nombre del paciente" v-model="citas.title">
+          <input class="input" type="text" placeholder="Nombre del paciente" v-model="citas.nombrePaciente">
           <label for="hora">Hora de la cita: </label>
-          <input class="input" type="time" name="" id="hora" v-model="citas.start">
+          <input class="input" type="time" name="" id="hora" v-model="citas.horaCita">
+          <label for="tel">Numero Telefonico: </label>
+          <input class="input" type="tel" name="tel" id="tel" v-model="citas.phone_number">
           <input class="btn btn-outline-primary" type="submit" value="Generar Cita" @click.prevent="CrearCita">
         </form>
-      </div>
+      </Modal>
     </div>
   </div>
 </template>
@@ -18,6 +20,9 @@
 <script>
 import Navegacion from '../components/navegacion.vue';
 import Agenda from '../components/Agenda'
+import Modal from '../components/Modal'
+import todoService from '../apiacces/todoService'
+import { mapGetters, mapState } from 'vuex';
 export default {
     name: "Home",
     data() {
@@ -25,30 +30,61 @@ export default {
         evento: false,
         seleccion: {},
         citas: {
-          title: "",
-          start: ""
+          nombrePaciente: "",
+          horaCita: "",
+          diaCita:"",
+          phone_number: ""
         }
       }
     },
+    mounted () {
+      this.obtenerCitas();
+    },
     components: {
       Navegacion,
-      Agenda
+      Agenda,
+      Modal
     },
     methods: {
       handleSelect(arg) {
         this.seleccion = {...arg}
+        this.citas.diaCita = this.seleccion.startStr
+        console.log(this.seleccion)
         this.evento = true
       },
       CrearCita(){
-        this.$store.commit("agendaEvents/ADD_EVENT",{
-          title: this.citas.title,
-          start: this.seleccion.startStr +"T"+this.citas.start,
-          allDay: false
+        todoService.post({
+          "nombrePaciente": this.citas.nombrePaciente,
+          "horaCita": this.citas.horaCita,
+          "diaCita": this.citas.diaCita,
+          "phone_number": this.citas.phone_number
         })
-        this.citas = {}
-        this.evento = false
+          .then(result =>{
+            this.citas = {}
+            this.obtenerCitas()
+            this.evento = false
+          })
       },
-    }
+      obtenerCitas(){
+        this.$store.commit("agendaEvents/BORRAR_EVENT")
+        todoService.get()
+          .then(result=>{
+            let citas = result.data
+            citas.map(element => {
+              this.$store.commit("agendaEvents/ADD_EVENT",{
+                title: element.nombrePaciente,
+                start: element.diaCita +"T"+ element.horaCita,
+                allDay: false
+              })
+            });
+            this.citas = {}
+            this.evento = false
+          })
+      }
+    },
+    computed: {
+      ...mapGetters("agendaEvents", ["EVENTS"]),
+    },
 }
 </script>
 
@@ -58,37 +94,5 @@ export default {
   margin-left: 17rem;
   transition: all 0.4s;
   position: relative !important;
-}
-.modal,
-.modal.modalEvent{
-  &.activo{
-    height: 100vh !important;
-    position: absolute !important;
-    background-color: rgba(97, 136, 148, 0.8);
-    overflow: visible !important;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .form{
-    display: flex;
-    flex-direction: column;
-    height: 15rem;
-    justify-content: center;
-    position: relative;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: $m-white;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.2), inset -1px -1px 0 0 rgba(0,0,0,0.2);
-    -moz-box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.2), inset -1px -1px 0 0 rgba(0,0,0,0.2);
-    box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.2), inset -1px -1px 0 0 rgba(0,0,0,0.2);
-  }
-  .input{
-    margin: 10px 0;
-  }
 }
 </style>

@@ -10,6 +10,9 @@ const getters = {
 const mutations = {
    ADD_EVENT: (state, event) => {
        state.events.push(event)
+   },
+   BORRAR_EVENT: (state)=>{
+       state.events = []
    }
 }
 
