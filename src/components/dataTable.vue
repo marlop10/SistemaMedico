@@ -12,7 +12,7 @@
           <button class="btn-stylesd" @click="abrirPaciente(props.cell_value)">
               <i class="fas fa-pen-fancy"></i>
           </button>
-          <button class="btn-stylesd">
+          <button @click="slide=true" class="btn-stylesd">
               <i class="fas fa-eye"></i>
           </button>
         </div>
@@ -41,6 +41,25 @@
           <input class="btn btn-outline-primary" type="submit" value="Generar Cita" @click.prevent="CrearPaciente">
         </form>
     </Modal>
+
+    <!-- SlideOut -->
+    <vue-slideout-panel 
+      id="slide-form" 
+      v-model="slide"
+      :widths="['50%']"
+      @close="slide=false">
+
+      <button type="button" class="btn-style-close" @click="slide=false">X</button>
+      <h3 class="text-center">Slide Panel</h3>
+      <div class="container">
+        Contenido o Componente del Slide...
+      </div>
+
+      <div class="b-footer"></div>
+    </vue-slideout-panel>
+    <!-- SlideOut -->
+
+
   </div>
 </template>
 
@@ -49,11 +68,15 @@ import VueBootstrap4Table from "vue-bootstrap4-table";
 import Modal from '../components/Modal'
 import todoPaciente from '../apiacces/todoPaciente'
 import { mapGetters, mapState } from 'vuex';
+
+import VueSlideoutPanel from 'vue-slideout-panel' // Slide import
+
 export default {
   name: "App",
   data() {
     return {
       evento: false,
+      slide: false,
       setPaciente: {
           nombre: "",
           apellidoP: "",
@@ -116,6 +139,7 @@ export default {
   components: {
     VueBootstrap4Table,
     Modal,
+    VueSlideoutPanel // Component Slide
   },
   methods: {
       abrirModal() {
@@ -313,4 +337,32 @@ export default {
     margin: 0 3px;
   }
 }
+
+.btn-style-close{
+  padding: 5px 15px;
+  border-radius: 6px;
+  background-size: 200% auto;
+  transition: 0.7s;
+  background: $m-white;
+  color: $secundario;
+  position: static;
+  top: 25px;
+  right: 15px;
+  &:hover {
+    background-position: right center;
+    background: #e9eaea;
+    color: blueviolet;
+  }
+}
+
+.b-footer{
+  background: linear-gradient(87deg, blueviolet, blue) !important;
+  height: 45px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  z-index: 1;
+  margin-left: -16px;
+}
+
 </style>
